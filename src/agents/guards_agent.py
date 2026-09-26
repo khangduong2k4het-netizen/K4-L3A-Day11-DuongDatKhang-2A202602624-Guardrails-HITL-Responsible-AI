@@ -281,8 +281,10 @@ def create_red_agent_advance():
 
     if red_uses_gemini():
         plugins = [GuardsInputPlugin(), GuardsOutputPlugin()]
+        from core.config import get_gemini_runtime_model
+
         agent = llm_agent.LlmAgent(
-            model=advance_model,
+            model=get_gemini_runtime_model(),
             name="red_agent_advance",
             instruction=RED_ADVANCE_INSTRUCTION,
         )

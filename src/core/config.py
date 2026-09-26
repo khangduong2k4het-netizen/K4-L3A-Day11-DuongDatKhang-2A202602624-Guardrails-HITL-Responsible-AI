@@ -165,6 +165,14 @@ def get_red_model_advance() -> str:
     return get_red_model()
 
 
+def get_gemini_runtime_model() -> str:
+    """Active model endpoint for Google AI Studio API calls."""
+    m = get_red_model()
+    if m in ("gemini-3.5-flash", "gemini-2.5-flash", "gemini-flash-latest"):
+        return "gemini-3.6-flash"
+    return m
+
+
 def get_openai_api_key() -> str:
     return os.environ.get("OPENAI_API_KEY", "").strip()
 

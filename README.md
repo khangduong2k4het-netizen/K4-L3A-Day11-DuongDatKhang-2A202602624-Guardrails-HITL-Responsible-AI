@@ -1,5 +1,7 @@
 # Day 11 — Controlled Agent Security (2026)
 
+Frontend demo: chạy `python src/demo.py`, mở **http://127.0.0.1:8080** để thử input guardrails hoặc gọi Blue Team. Xem [hướng dẫn demo](frontend/README.md).
+
 > 👤 **Hình thức:** bài tập **cá nhân** (1 người / 1 MSSV).  
 > 🎯 **Mục tiêu:** xây **Blue** (phòng thủ), rồi red-team **Red** + **Red Advance**.  
 > ✅ Làm theo **Checkpoint 1 → 5** trong [`CHECKPOINTS.md`](CHECKPOINTS.md) · nộp theo [`SUBMISSION.md`](SUBMISSION.md).

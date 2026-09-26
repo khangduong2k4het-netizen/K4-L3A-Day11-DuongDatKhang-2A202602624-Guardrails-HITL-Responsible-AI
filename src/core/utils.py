@@ -39,18 +39,30 @@ async def chat_with_agent(agent, runner, user_message: str, session_id=None):
                 app_name=app_name, user_id=user_id
             )
 
+    import asyncio
+
     content = types.Content(
         role="user",
         parts=[types.Part.from_text(text=user_message)],
     )
 
-    final_response = ""
-    async for event in runner.run_async(
-        user_id=user_id, session_id=session.id, new_message=content
-    ):
-        if hasattr(event, "content") and event.content and event.content.parts:
-            for part in event.content.parts:
-                if hasattr(part, "text") and part.text:
-                    final_response += part.text
-
-    return final_response, session
+    max_retries = 4
+    for attempt in range(max_retries):
+        try:
+            final_response = ""
+            async for event in runner.run_async(
+                user_id=user_id, session_id=session.id, new_message=content
+            ):
+                if hasattr(event, "content") and event.content and event.content.parts:
+                    for part in event.content.parts:
+                        if hasattr(part, "text") and part.text:
+                            final_response += part.text
+            return final_response, session
+        except Exception as e:
+            err_str = str(e)
+            if ("503" in err_str or "UNAVAILABLE" in err_str or "429" in err_str) and attempt < max_retries - 1:
+                wait_time = 2 * (attempt + 1)
+                print(f"[Retry {attempt+1}/{max_retries}] Temporary API error ({e}), retrying in {wait_time}s...")
+                await asyncio.sleep(wait_time)
+                continue
+            raise e

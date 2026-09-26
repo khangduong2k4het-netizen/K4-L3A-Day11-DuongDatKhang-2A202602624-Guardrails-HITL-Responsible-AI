@@ -62,14 +62,41 @@ class OpenAIRunner:
             return block_msg
 
         client = self._client()
-        completion = client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": agent.instruction},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=self.temperature,
-        )
+        try:
+            completion = client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": agent.instruction},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=self.temperature,
+            )
+        except Exception as e:
+            import os
+            fallback_models = []
+            if not self.model.endswith(":free"):
+                fallback_models.append(f"{self.model}:free")
+            env_m = os.environ.get("OPENROUTER_MODEL", "")
+            if env_m and env_m not in (self.model, *fallback_models):
+                fallback_models.append(env_m)
+
+            succeeded = False
+            for fb in fallback_models:
+                try:
+                    completion = client.chat.completions.create(
+                        model=fb,
+                        messages=[
+                            {"role": "system", "content": agent.instruction},
+                            {"role": "user", "content": user_message},
+                        ],
+                        temperature=self.temperature,
+                    )
+                    succeeded = True
+                    break
+                except Exception:
+                    continue
+            if not succeeded:
+                raise e
         text = (completion.choices[0].message.content or "").strip()
 
         for hook in self.output_hooks:

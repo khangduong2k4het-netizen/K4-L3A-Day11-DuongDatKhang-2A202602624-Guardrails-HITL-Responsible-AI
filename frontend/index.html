@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VinBank · Guardrails Lab</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head>
+<body>
+<header><a class="brand" href="/">V<span>VinBank <small>AI LAB</small></span></a><span class="local">● Local demo</span></header>
+<main>
+<div class="intro"><div><p class="eyebrow">RESPONSIBLE AI / GUARDRAILS</p><h1>Thử thách AI.<br><span>Quan sát lớp bảo vệ.</span></h1><p>Đưa prompt vào Blue Team và theo dõi cách hệ thống xử lý.</p></div><div class="shield">B<span>BLUE TEAM</span></div></div>
+<section class="stats" aria-label="Thống kê phiên"><div><strong id="total">0</strong><span>Lượt kiểm tra</span></div><div><strong id="blocked">0</strong><span>Bị chặn</span></div><div><strong id="redacted">0</strong><span>Output được lọc</span></div><div><strong id="latency">—</strong><span>Thời gian gần nhất</span></div></section>
+<div class="workspace"><section class="panel"><div class="panel-title"><h2>01 / Phòng thử nghiệm</h2><span class="tag">PLAYGROUND</span></div>
+<form id="form"><label for="mode">Chế độ</label><select id="mode"><option value="offline">Kiểm tra input · Không gọi API</option><option value="live">Blue Team · Gọi model thật</option></select><p class="hint" id="mode-note">Chỉ chạy injection và topic filter hiện có. Không tạo câu trả lời AI.</p>
+<label for="samples">Chọn tình huống</label><select id="samples"><option value="">Tự nhập prompt…</option></select>
+<label for="prompt">Prompt của bạn</label><textarea id="prompt" required maxlength="8000" rows="8" placeholder="Nhập câu hỏi ngân hàng hoặc một prompt tấn công…"></textarea><div class="submit-row"><span class="hint">Mỗi lượt là một thử nghiệm độc lập.</span><button id="submit" type="submit">Kiểm tra prompt ↗</button></div></form></section>
+<section class="panel result"><div class="panel-title"><h2>02 / Kết quả xử lý</h2><span id="badge" class="tag">SẴN SÀNG</span></div><div id="checks" class="checks"><div>Injection <b>—</b></div><div>Chủ đề <b>—</b></div><div>Lớp xử lý <b>—</b></div></div><p class="eyebrow">PHẢN HỒI</p><div id="response" role="status" aria-live="polite" class="response">Chọn một tình huống để bắt đầu.<br>Kết quả sẽ xuất hiện tại đây.</div><p class="hint">Vượt qua input filter không đồng nghĩa với an toàn. Chế độ live chạy pipeline Blue với rate limit và output guardrails; LLM judge / NeMo chưa bật.</p></section></div>
+<section class="panel history"><div class="panel-title"><h2>Lịch sử phiên demo</h2><button class="secondary" id="clear">Xóa lịch sử</button></div><p class="hint">Chỉ lưu trong trang hiện tại, không ghi đè kết quả chấm bài.</p><div id="history"><p class="empty">Chưa có lượt kiểm tra nào.</p></div></section>
+<footer>VinBank AI Lab <span>Guardrails · Red teaming · Responsible AI</span></footer>
+</main></body></html>
